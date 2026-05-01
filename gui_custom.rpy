@@ -3,17 +3,17 @@
 ## ============================================================
 
 ## ─── WARNA TEMA UTAMA ─────────────────────────────────────────
+## Definisi palet warna tema "Dark Tech" agar konsisten di seluruh UI game.
 
-## Dark tech palette
-define ACCENT_BLUE    = "#00E5FF"
-define ACCENT_GOLD    = "#FFD700"
-define DARK_BG        = "#0D1117"
-define PANEL_BG       = "#0F1923"
-define TEXT_PRIMARY   = "#E3F2FD"
-define TEXT_MUTED     = "#78909C"
-define SUCCESS_COLOR  = "#76FF03"
-define WARNING_COLOR  = "#FFD740"
-define DANGER_COLOR   = "#FF5252"
+define ACCENT_BLUE    = "#00E5FF" # Warna aksen biru neon (Cyber)
+define ACCENT_GOLD    = "#FFD700" # Warna aksen emas (Penting)
+define DARK_BG        = "#0D1117" # Warna latar belakang gelap (GitHub style)
+define PANEL_BG       = "#0F1923" # Warna latar belakang panel
+define TEXT_PRIMARY   = "#E3F2FD" # Warna teks utama
+define TEXT_MUTED     = "#78909C" # Warna teks redup/sekunder
+define SUCCESS_COLOR  = "#76FF03" # Warna hijau untuk indikator sukses
+define WARNING_COLOR  = "#FFD740" # Warna kuning untuk peringatan
+define DANGER_COLOR   = "#FF5252" # Warna merah untuk error/bahaya
 
 ## ─── OVERRIDE GUI GLOBAL ──────────────────────────────────────
 
@@ -54,14 +54,15 @@ style say_label:
     outlines [(2, "#000000AA", 1, 1)]
 
 ## ─── LAYAR MENU PILIHAN (Choice) ─────────────────────────────
+## Mengatur tampilan tombol pilihan (menu) saat pemain harus memilih opsi.
 
 style choice_vbox:
-    spacing 12
+    spacing 12 # Jarak antar tombol pilihan
 
 style choice_button:
-    background Frame("#0D1B2A", 6, 6)
-    hover_background Frame("#0D3B5E", 6, 6)
-    selected_background Frame("#0D2E4D", 6, 6)
+    background Frame("#0D1B2A", 6, 6) # Latar tombol saat diam
+    hover_background Frame("#0D3B5E", 6, 6) # Latar tombol saat kursor di atasnya
+    selected_background Frame("#0D2E4D", 6, 6) # Latar tombol saat dipilih
     padding (20, 12)
     xminimum 560
     xalign 0.5

@@ -5,23 +5,28 @@
 ## ============================================================
 
 ## ─── DEFINISI KARAKTER ────────────────────────────────────────
+## Di sini kita mendefinisikan karakter yang ada di dalam game.
+## 'define mc' mendefinisikan karakter utama dengan nama yang bisa diinput pemain.
+## Argumen 'color' menentukan warna nama karakter di kotak dialog.
 
 define mc     = Character("[nama_mc]", color="#00E5FF", what_color="#FFFFFF")
-define mentor = Character("Pak Hendra", color="#FFD700", what_color="#FFD700")
-define rafi   = Character("Rafi",       color="#76FF03", what_color="#76FF03")
-define client = Character("Bu Dewi",    color="#FF80AB", what_color="#FF80AB")
-define admin  = Character("Pak Admin",  color="#FF6E40", what_color="#FF6E40")
-define sistem = Character("[[ SISTEM ]]", color="#B0BEC5", what_color="#B0BEC5")
-define narasi = Character("",          color="#CFD8DC", what_color="#E0E0E0", what_italic=True)
+define mentor = Character("Pak Hendra", color="#FFD700", what_color="#FFD700") # Karakter senior teknisi
+define rafi   = Character("Rafi",       color="#76FF03", what_color="#76FF03") # Sesama anak magang
+define client = Character("Bu Dewi",    color="#FF80AB", what_color="#FF80AB") # Pelanggan/User
+define admin  = Character("Pak Admin",  color="#FF6E40", what_color="#FF6E40") # Administrator sistem
+define sistem = Character("[[ SISTEM ]]", color="#B0BEC5", what_color="#B0BEC5") # Notifikasi sistem/log
+define narasi = Character("",          color="#CFD8DC", what_color="#E0E0E0", what_italic=True) # Teks narasi (tanpa nama)
 
 ## ─── VARIABEL GAME ────────────────────────────────────────────
+## Variabel 'default' digunakan untuk menyimpan status permainan seperti skor dan jumlah percobaan.
 
-default score          = 0
-default tries_q1       = 0
-default tries_q2       = 0
-default tries_q3       = 0
-default tries_climax   = 0
-default nama_mc        = "Alex"
+default score          = 0 # Skor total pemain
+default tries_q1       = 0 # Jumlah percobaan pada Pertanyaan 1
+default tries_q2       = 0 # Jumlah percobaan pada Pertanyaan 2
+default tries_q3       = 0 # Jumlah percobaan pada Pertanyaan 3
+default tries_climax   = 0 # Jumlah percobaan pada bagian Klimaks
+default nama_mc        = "Alex" # Nama default pemain
+default in_quiz_mode   = False # Status apakah pemain sedang dalam mode kuis
 default refleksi_score = 0
 default ch2_score      = 0
 default tries_ch2_q1   = 0
@@ -31,23 +36,27 @@ default tries_ch2_climax = 0
 
 ## ─── VARIABEL MINI-GAME CRIMPING ──────────────────────────────
 ## Urutan T568B yang benar: OW, O, GW, BL, BLW, G, CW, C
+## crimping_slot menyimpan urutan kabel yang dipilih pemain (ada 8 slot).
 
 default crimping_slot  = [0, 0, 0, 0, 0, 0, 0, 0]
+
 ## ─── PENYESUAIAN POSISI & UKURAN KARAKTER ────────────────────
-## Menarik posisi kiri/kanan lebih ke pinggir agar tidak menumpuk di tengah
+## Transformasi di bawah ini mengatur posisi sprite karakter di layar.
+
 transform left:
-    xpos 0.25
+    xpos 0.25 # Posisi di sisi kiri layar
     xanchor 0.5
 
 transform right:
-    xpos 0.75
+    xpos 0.75 # Posisi di sisi kanan layar
     xanchor 0.5
 
 transform center:
-    xpos 0.5
+    xpos 0.5 # Posisi di tengah layar
     xanchor 0.5
     
 transform loncat:
+    # Efek animasi melompat sederhana untuk ekspresi karakter
     easein 0.15 yoffset -40
     easeout 0.15 yoffset 0
     easein 0.1 yoffset -20
@@ -80,11 +89,12 @@ image bg lab    = Transform("images/bg lab.jpg", size=(1920, 1080))
 image bg serverroom = Transform("images/bg serverroom.jpg", size=(1920, 1080))
 
 ## ─── FUNGSI PYTHON HELPER ─────────────────────────────────────
+## Blok 'init python' berisi logika Python murni yang dijalankan saat game dijalankan.
 
 init python:
 
     def get_grade():
-        """Mengembalikan grade berdasarkan score."""
+        """Mengembalikan nilai huruf (A/B/C/D) berdasarkan skor yang didapat."""
         if score >= 80:
             return "A"
         elif score >= 60:
@@ -95,6 +105,7 @@ init python:
             return "D"
 
     def get_ending_type():
+        """Menentukan jenis ending (pro/mid/bad) berdasarkan skor akhir."""
         if score >= 70:
             return "pro"
         elif score >= 40:
@@ -103,29 +114,30 @@ init python:
             return "bad"
 
     def crimping_check(slots):
-        """Periksa apakah urutan crimping T568B sudah benar."""
+        """Memeriksa apakah urutan kabel (slots) sesuai dengan standar T568B."""
+        # Urutan benar direpresentasikan oleh angka 1 sampai 8
         correct = [1, 2, 3, 4, 5, 6, 7, 8]
         return slots == correct
 
 ## ─── LAYAR KUSTOM ─────────────────────────────────────────────
 
-## HUD Score
+## HUD Score: Menampilkan skor di pojok kanan atas layar secara permanen.
 screen hud_score():
     frame:
         xalign 1.0
         yalign 0.0
         xoffset -10
         yoffset 10
-        background Frame("#1A237E88", 8, 8)
+        background Frame("#1A237E88", 8, 8) # Latar belakang biru tua transparan
         padding (12, 8)
         vbox:
             spacing 2
             text "[[ SKOR ]]" size 11 color "#90CAF9" xalign 1.0
             text "[score] poin" size 18 color "#E3F2FD" bold True xalign 1.0
 
-## Layar konfirmasi pilihan
+## Layar konfirmasi pilihan: Digunakan untuk menanyakan konfirmasi (Ya/Tidak) kepada pemain.
 screen konfirmasi(pesan, label_ya, label_tidak):
-    modal True
+    modal True # Menghalangi interaksi dengan layar di bawahnya
     frame:
         xalign 0.5
         yalign 0.5
@@ -140,11 +152,11 @@ screen konfirmasi(pesan, label_ya, label_tidak):
                 textbutton "Ya"    action [Hide("konfirmasi"), Jump(label_ya)] style "choice_button"
                 textbutton "Tidak" action [Hide("konfirmasi"), Jump(label_tidak)] style "choice_button"
 
-## Layar mini-game crimping
+## Layar mini-game crimping: Inti dari simulasi pemasangan kabel UTP.
 screen crimping_game():
     modal True
 
-    ## Background panel
+    ## Background panel utama
     frame:
         xalign 0.5
         yalign 0.5
@@ -155,15 +167,15 @@ screen crimping_game():
         vbox:
             spacing 12
 
-            ## Judul
+            ## Judul Mini-game
             text "🔌 MINI-GAME: CRIMPING T568B" size 22 color "#00E5FF" bold True xalign 0.5
 
-            ## Instruksi
+            ## Instruksi singkat
             text "Susun urutan warna kabel UTP standar T568B dengan benar!" size 13 color "#B0BEC5" xalign 0.5
 
             null height 5
 
-            ## Referensi standar
+            ## Referensi standar T568B sebagai panduan pemain
             frame:
                 background Frame("#0A1628", 8, 8)
                 padding (12, 8)
@@ -179,7 +191,7 @@ screen crimping_game():
 
             null height 8
 
-            ## Grid slot — tampilkan urutan yang sudah diisi
+            ## Grid slot: Menampilkan urutan kabel yang sedang disusun pemain
             text "Klik warna kabel sesuai urutan (1 → 8):" size 13 color "#E3F2FD"
 
             hbox:
@@ -192,12 +204,13 @@ screen crimping_game():
                             xsize 72
                             ysize 40
                             background Frame(slot_color(crimping_slot[i]), 4, 4)
+                            # Tampilkan label warna jika slot terisi, jika tidak tampilkan tanda tanya
                             text (slot_label(crimping_slot[i]) if crimping_slot[i] != 0 else "?") size 11 color "#FFFFFF" bold True xalign 0.5 yalign 0.5
                         text str(i+1) size 12 color "#B0BEC5" xalign 0.5
 
             null height 6
 
-            ## Panel pilih kabel — klik langsung isi slot berikutnya
+            ## Panel pilih kabel: Daftar tombol warna kabel yang bisa dipilih
             frame:
                 background Frame("#0A1628", 8, 8)
                 padding (10, 8)
@@ -219,9 +232,10 @@ screen crimping_game():
                                             text_color "#FFFFFF"
                                             text_size 10
                                             text_bold True
+                                            # Memanggil fungsi Python untuk menambah kabel ke slot kosong berikutnya
                                             action Function(add_kabel_to_next_slot, i+1)
 
-            ## Tombol aksi
+            ## Tombol aksi (Reset, Hapus, Cek Jawaban)
             null height 6
             hbox:
                 spacing 12
@@ -343,25 +357,25 @@ label start:
     # Fade In Video (Tersedot ke portal)
     show intro_movie with dissolve
 
-    # Sesuaikan angka ini dengan durasi video kamu
-    $ renpy.pause(10.0)
+    # Sesuaikan angka ini dengan durasi video kamu (16 detik)
+    $ renpy.pause(16.5)
 
     # Fade Out Video
     hide intro_movie with dissolve
 
     # --- BAGIAN DIALOG BINGUNG ---
     # Tampilkan teks di layar hitam dulu untuk kesan misterius
-    narasi "Ugh... kepalaku... sakit sekali..."
-    narasi "Apa yang baru saja terjadi?"
-    narasi "Rasanya seperti seluruh badanku ditarik paksa ke dalam lubang cahaya tadi..."
+    narasi "Dunia teknologi informasi selalu berkembang dengan sangat cepat..."
+    narasi "Dan hari ini, petualanganku untuk menjadi seorang profesional di dunia jaringan resmi dimulai."
+    narasi "Selamat datang di NetPro: Program Magang Jaringan."
 
     ## Setup Latar dan Musik
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_ch1.mp3" fadein 1.5
     scene bg luar with dissolve
     
-    narasi "Tunggu... bukannya tadi aku sedang berdiri di depan rak server di laboratorium?"
-    narasi "Kenapa sekarang aku malah ada di depan gedung PT. Nusanet?"
-    narasi "Apakah itu tadi cuma mimpi? Tapi rasanya sangat nyata..."
+    narasi "Aku menarik napas panjang, menenangkan debar jantung di dadaku."
+    narasi "Berdiri di depan gedung PT. Nusanet ini rasanya seperti awal dari sesuatu yang besar."
+    narasi "Perjalanan untuk belajar langsung dari para pakar jaringan... akhirnya dimulai sekarang."
 
     narasi "Selamat Datang di NetPro: Magang Jaringan!"
     narasi "Sebelum memulai petualanganmu, tentukan namamu terlebih dahulu."
@@ -378,8 +392,8 @@ label start:
 
     show screen hud_score
 
-    narasi "Kamu mencoba menenangkan diri dan merapikan seragam magangmu."
-    narasi "Hari ini adalah hari pertama magangmu di divisi IT, namun kejadian di 'mimpi' tadi masih membekas."
+    narasi "Kamu merapikan seragam magangmu dan memastikan kartu ID-mu terpasang dengan benar."
+    narasi "Hari ini adalah hari pertama magangmu, dan kamu sudah siap untuk menyerap semua ilmu baru."
 
     jump intro
 
@@ -574,9 +588,9 @@ label quest2_benar:
     sistem "[[ HASIL ]] Benar — Putih Orange, Orange, Putih Hijau, Biru, Putih Biru, Hijau, Putih Coklat, Coklat ✓"
 
     mentor "Luar biasa! Urutan T568B kamu sempurna!"
-    mc "Alhamdulillah! Lumayan juga menghafalnya..."
+    mc "Syukurlah! Lumayan juga menghafalnya..."
     show rafi malu at left with dissolve
-    rafi "Anjir [nama_mc] ngerti beneran. Gue malah masih bingung urutan ke-4 sama ke-5..."
+    rafi "Wah, [nama_mc] ngerti beneran. Gue malah masih bingung urutan ke-4 sama ke-5..."
     mentor "Rafi, kabel ke-4 itu Biru, ke-5 Putih Biru. Biru dulu, baru Putih Biru."
     rafi "Ohhhh! Iya ya. Makasih Pak!"
     hide rafi with dissolve
@@ -791,13 +805,13 @@ label climax_pilih:
             jump climax_salah_a
 
         "Broadcast storm (loop) isolasi & matikan port":
-            jump climax_benar_b
+            jump climax_benar
 
         "Ganti semua kabel jaringan":
-            jump climax_salah_c
+            jump climax_salah_b
 
         "Reset factory semua perangkat jaringan":
-            jump climax_salah_d
+            jump climax_salah_c
 
 label climax_benar:
 
@@ -1060,9 +1074,10 @@ label game_over:
 ## ============================================================
 
 label refleksi_quiz:
+    $ in_quiz_mode = True
 
     stop music fadeout 1.5
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_quiz.mp3" fadein 1.5
     scene bg lab with dissolve
     $ refleksi_score = 0
 
@@ -1229,6 +1244,8 @@ label refleksi_quiz:
     show mentor neutral at right with dissolve
     show rafi neutral at left with dissolve
 
+    $ in_quiz_mode = False
+
     narasi ""
     narasi "📊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━📊"
     narasi "      HASIL REFLEKSI CHAPTER 1"
@@ -1285,7 +1302,7 @@ label refleksi_quiz:
 
 label chapter2:
 
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_ch2.mp3" fadein 1.5
     scene bg kantor with fade
     $ ch2_score = 0
     $ tries_ch2_q1 = 0
@@ -1719,8 +1736,9 @@ label ch2_ending:
 ## ============================================================
 
 label refleksi_quiz_ch2:
+    $ in_quiz_mode = True
     stop music fadeout 1.5
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_quiz.mp3" fadein 1.5
     scene bg lab with dissolve
     $ ch2_refleksi_score = 0
 
@@ -1846,6 +1864,7 @@ label refleksi_quiz_ch2:
             hide mentor with dissolve
 
     ## HASIL REFLEKSI CH2
+    $ in_quiz_mode = False
     scene bg kantor with dissolve
     show mentor neutral at right with dissolve
     show rafi neutral at left with dissolve
@@ -1889,7 +1908,7 @@ label refleksi_quiz_ch2:
 ## ============================================================
 
 label chapter3:
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_ch3.mp3" fadein 1.5
     scene bg kantor with fade
     $ ch3_score = 0
     $ tries_ch3_q1 = 0
@@ -2133,6 +2152,7 @@ label ch3_ending:
 
 ## ─── REFLEKSI KUIS CHAPTER 3 ────────────────────────────────
 label refleksi_quiz_ch3:
+    $ in_quiz_mode = True
     scene bg lab with dissolve
     $ ch3_refleksi_score = 0
 
@@ -2203,6 +2223,7 @@ label refleksi_quiz_ch3:
             mentor "❌ Aman terenkripsi, bukan default Telnet."
 
     ## EVALUASI SEMENTARA CH 3
+    $ in_quiz_mode = False
     scene bg kantor with dissolve
     
     show admin happy at right, loncat
@@ -2237,7 +2258,7 @@ label refleksi_quiz_ch3:
 ## ============================================================
 
 label chapter4:
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_ch4.mp3" fadein 1.5
     scene bg serverroom with fade
     $ ch4_score = 0
     $ tries_ch4_q1 = 0
@@ -2472,6 +2493,7 @@ label ch4_ending:
 
 ## ─── REFLEKSI KUIS CHAPTER 4 ────────────────────────────────
 label refleksi_quiz_ch4:
+    $ in_quiz_mode = True
     scene bg lab with dissolve
     $ ch4_refleksi_score = 0
 
@@ -2541,6 +2563,7 @@ label refleksi_quiz_ch4:
             mentor "❌ Untuk melacak hop IP."
 
     ## HASIL CH4
+    $ in_quiz_mode = False
     scene bg kantor with dissolve
     show mentor neutral at right with dissolve
 
@@ -2573,7 +2596,7 @@ label refleksi_quiz_ch4:
 ## ============================================================
 
 label chapter5:
-    play music "audio/bgm_main.mp3" fadein 1.5
+    play music "audio/bgm_ch5.mp3" fadein 1.5
     scene bg kantor with fade
     $ ch5_score = 0
     $ tries_ch5_q1 = 0
@@ -2799,6 +2822,7 @@ label ch5_ending:
 
 ## ─── REFLEKSI KUIS CHAPTER 5 ────────────────────────────────
 label refleksi_quiz_ch5:
+    $ in_quiz_mode = True
     scene bg lab with dissolve
     $ ch5_refleksi_score = 0
 
@@ -2868,6 +2892,7 @@ label refleksi_quiz_ch5:
             mentor "❌ Layer 3 memproses IP routing (seperti OSPF)."
 
     ## HASIL AKHIR & GRAND FINALE
+    $ in_quiz_mode = False
     scene bg ending_ok with dissolve
     play music "audio/bgm_success.mp3" fadein 2.0
     

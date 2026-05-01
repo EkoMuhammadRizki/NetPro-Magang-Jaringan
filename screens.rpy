@@ -81,40 +81,64 @@ style frame:
 ## Layar In-game
 ################################################################################
 
-
-## Layar Say ###################################################################
-##
-## Layar say di gunakan untuk menampilkan dialog kepada pemain. Ini menggunakan
-## dua parameter, who dan what, yang merupakan nama karakter yang berbicara dan
-## text yang akan di tampilkan, masing-masing. (Kedua parameter dapat berisi
-## None jika tidak ada nama yang di berikan.
-##
-## Layar ini harus membuat text yang dapat di tampilkan dengan id "what", yang
-## di mana Ren'Py menggunakan ini untuk mengatur tampilan text. Ini juga dapat
-## membuat sesuatu yang dapat di tampilkan dengan id "who" dan id "window" untuk
-## mengaplikasikan properti gaya.
-##
-## https://www.renpy.org/doc/html/screen_special.html#say
+## Layar ini menangani tampilan kotak dialog (textbox) saat karakter berbicara.
 
 screen say(who, what):
 
-    window:
-        id "window"
+    # Cek apakah sedang dalam 'mode kuis' (in_quiz_mode)
+    # Jika ya, tampilkan kotak dialog khusus bergaya terminal sistem.
+    if getattr(store, "in_quiz_mode", False):
+        window:
+            id "window"
+            background Solid("#0A1628F2") # Latar belakang biru gelap solid transparan
+            xalign 0.5 yalign 0.15 ysize None
+            xsize 1000
+            padding (30, 30)
 
-        if who is not None:
+            vbox:
+                spacing 15
+                xfill True
+                
+                hbox:
+                    xalign 0.5
+                    spacing 10
+                    text "> SYSTEM ASSESSMENT PROTOCOL" size 20 color "#00E5FF" bold True
+                    if who:
+                        text ":: [who]" size 16 color "#76FF03" yalign 0.5
 
-            window:
-                id "namebox"
-                style "namebox"
-                text who id "who"
+                frame:
+                    background Solid("#112233")
+                    padding (25, 20)
+                    xfill True
+                    xalign 0.5
 
-        text what id "what"
+                    text what id "what":
+                        color "#E3F2FD"
+                        size 22
+                        text_align 0.5
+                        xalign 0.5
+                        yalign 0.5
+                        xmaximum 850
+                        layout "subtitle"
+    else:
+        # Tampilan kotak dialog standar jika tidak sedang kuis
+        window:
+            id "window"
+
+            if who is not None:
+
+                window:
+                    id "namebox"
+                    style "namebox"
+                    text who id "who"
+
+            text what id "what"
 
 
-    ## Jika ada gambar di sisi, tampilkan di atas text. Jangan tampilkan di
-    ## versi HP[Handphone)(Android) - Karena tidak ada ruang.
-    if not renpy.variant("small"):
-        add SideImage() xalign 0.0 yalign 1.0
+        ## Jika ada gambar di sisi, tampilkan di atas text. Jangan tampilkan di
+        ## versi HP[Handphone)(Android) - Karena tidak ada ruang.
+        if not renpy.variant("small"):
+            add SideImage() xalign 0.0 yalign 1.0
 
 
 ## Buat namebox tersedia untuk mengatur gaya melalui objek karakter.
@@ -198,19 +222,33 @@ style input:
 
 
 ## Layar Pilihan ###############################################################
-##
-## Layar ini digunakan untuk menampilkan pilihan dalam game yang disajikan oleh
-## menu statement. Satu parameter, item, adalah daftar objek, masing-masing
-## dengan bidang keterangan dan tindakan.
-##
-## https://www.renpy.org/doc/html/screen_special.html#choice
+## Layar ini menampilkan tombol-tombol pilihan (menu) di layar.
 
 screen choice(items):
     style_prefix "choice"
 
-    vbox:
-        for i in items:
-            textbutton i.caption action i.action
+    # Logika kustom untuk tampilan pilihan saat 'mode kuis'
+    if getattr(store, "in_quiz_mode", False):
+        vbox:
+            xalign 0.5
+            yalign 0.65
+            spacing 15
+            for i in items:
+                textbutton i.caption:
+                    action i.action
+                    xfill True
+                    xminimum 700
+                    background Frame("#112233", 6, 6)
+                    hover_background Frame("#1A3A5A", 6, 6)
+                    text_color "#E3F2FD"
+                    text_hover_color "#76FF03"
+                    text_size 20
+                    padding (20, 15)
+    else:
+        # Tampilan pilihan standar
+        vbox:
+            for i in items:
+                textbutton i.caption action i.action
 
 
 style choice_vbox is vbox
@@ -346,37 +384,30 @@ style navigation_button_text:
     properties gui.text_properties("navigation_button")
 
 
-## Layar Menu utama ############################################################
-##
-## Digunakan untuk menampilkan menu utama ketika Ren'Py dimulai.
-##
-## https://www.renpy.org/doc/html/screen_special.html#main-menu
+## layar Menu utama ############################################################
+## Menampilkan menu utama saat game pertama kali dibuka.
 
 screen main_menu():
 
-    ## Ini Memastikan Layar Menu Yang Lain Telah Di Timpa
     tag menu
 
+    # Menambahkan latar belakang menu utama (biasanya gambar statis atau animasi)
     add gui.main_menu_background
 
-    ## MENGHILANGKAN FRAME GELAP DI MENU UTAMA (Agar persis seperti contoh Colorful World)
-    # frame:
-    #     style "main_menu_frame"
-
-    ## MENU KUSTOM SESUAI REFERENSI GUI (DI TENGAH)
+    ## MENU KUSTOM SESUAI REFERENSI GUI (Posisi di Tengah)
     vbox:
-        xalign 0.5    # Posisi Tengah
-        yalign 0.90   # Posisi di bawah logo
+        xalign 0.5    # Rata tengah secara horizontal
+        yalign 0.90   # Posisi di bagian bawah layar
         spacing 15    # Jarak antar tombol
 
-        # Gunakan gambarmu dari Figma (Export 2 file: _idle dan _hover)
-        imagebutton idle "gui/Mulai.png" action Start() xalign 0.5
-        imagebutton idle "gui/Lanjutkan.png" action ShowMenu("load") xalign 0.5
-        imagebutton idle "gui/Pengaturan.png" action ShowMenu("preferences") xalign 0.5
-        imagebutton idle "gui/Kredit.png" action ShowMenu("about") xalign 0.5
+        # Tombol-tombol menu menggunakan gambar (imagebutton)
+        imagebutton idle "gui/Mulai.png" action Start() xalign 0.5 # Memulai game baru
+        imagebutton idle "gui/Lanjutkan.png" action ShowMenu("load") xalign 0.5 # Melanjutkan game (Load)
+        imagebutton idle "gui/Pengaturan.png" action ShowMenu("preferences") xalign 0.5 # Menu pengaturan
+        imagebutton idle "gui/Kredit.png" action ShowMenu("about") xalign 0.5 # Menu tentang/kredit
         
         if renpy.variant("pc"):
-            imagebutton idle "gui/Keluar.png" action Quit(confirm=not main_menu) xalign 0.5
+            imagebutton idle "gui/Keluar.png" action Quit(confirm=not main_menu) xalign 0.5 # Keluar dari game
 
     ## TEKS COPYRIGHT WATERMARK (POJOK KANAN BAWAH)
     text "Copyright 2026 NetPro All Rights Reserved.":
