@@ -1,0 +1,14 @@
+{
+  "package": "com.netpro.magangjaringan",
+  "name": "NetPro: Magang Jaringan",
+  "icon_name": "NetPro",
+  "version": "1.0.0",
+  "numeric_version": 100,
+  "orientation": "landscape",
+  "permissions": [
+    "VIBRATE"
+  ],
+  "store": "none",
+  "include_guide": false,
+  "update_icons": true
+}

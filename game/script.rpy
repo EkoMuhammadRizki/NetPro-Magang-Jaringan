@@ -1,4 +1,4 @@
-﻿## ============================================================
+## ============================================================
 ## NetPro: Magang Jaringan
 ## Visual Novel Edukasi Teknik Komputer & Jaringan (TKJ)
 ## Versi 1.0 | Siap Dikembangkan Komersial
@@ -389,7 +389,19 @@ init python:
 ## ============================================================
 
 label splashscreen:
-    $ renpy.movie_cutscene("movies/intro_awal.webm")
+    python:
+        if renpy.variant("pc"):
+            # Jika dideploy sebagai EXE (PC), selalu gunakan WebM
+            renpy.movie_cutscene("movies/intro_awal.webm")
+        elif renpy.variant("android"):
+            # Jika dideploy ke Android, coba WebM dulu. Jika tidak didukung/gagal, fallback ke MP4
+            try:
+                renpy.movie_cutscene("movies/intro_awal.webm")
+            except Exception as e:
+                renpy.movie_cutscene("movies/intro_awal.mp4")
+        else:
+            # Platform lainnya default ke MP4
+            renpy.movie_cutscene("movies/intro_awal.mp4")
     scene black
     return
 

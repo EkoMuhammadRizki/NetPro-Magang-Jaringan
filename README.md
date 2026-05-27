@@ -1,7 +1,7 @@
 # NetPro: Magang Jaringan 🌐
 
 <p align="center">
-  <img src="/game/logo/NetPro-Logo.png" alt="NetPro Logo" width="300">
+  <img src="game/logo/NetPro-Logo.png" alt="NetPro Logo" width="300">
 </p>
 
 ## 📝 Tentang Game

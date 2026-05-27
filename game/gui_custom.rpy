@@ -31,6 +31,10 @@ init python:
     gui.accent_color              = "#00E5FF"
     gui.focus_color               = "#0277BD"
 
+    # Perbaikan error runtime aset frame yang hilang (menggunakan Solid bertema Dark Tech)
+    gui.frame_background          = Solid("#0F192AEE")
+    gui.confirm_frame_background  = Solid("#0D1B2A")
+
 ## ─── TEXTBOX (Dialog Box) ─────────────────────────────────────
 
 ## Override warna textbox agar lebih dark & premium
