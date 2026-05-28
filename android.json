@@ -1,14 +1,25 @@
 {
-  "package": "com.netpro.magangjaringan",
-  "name": "NetPro: Magang Jaringan",
-  "icon_name": "NetPro",
-  "version": "1.0.0",
-  "numeric_version": 100,
-  "orientation": "landscape",
-  "permissions": [
-    "VIBRATE"
-  ],
-  "store": "none",
-  "include_guide": false,
-  "update_icons": true
+    "expansion": false,
+    "google_play_key": null,
+    "google_play_salt": null,
+    "heap_size": "3",
+    "icon_name": "NetPro",
+    "include_guide": false,
+    "include_pil": false,
+    "include_sqlite": false,
+    "layout": null,
+    "name": "NetPro: Magang Jaringan",
+    "numeric_version": 100,
+    "orientation": "sensorLandscape",
+    "package": "com.taki.magangjaringan",
+    "permissions": [
+        "VIBRATE",
+        "INTERNET"
+    ],
+    "source": false,
+    "store": "none",
+    "update_always": true,
+    "update_icons": true,
+    "update_keystores": true,
+    "version": "1.0.0"
 }

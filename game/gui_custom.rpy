@@ -90,6 +90,60 @@ style quick_button_text:
     hover_color "#00E5FF"
     outlines []
 
+## ─── OVERRIDE KHUSUS ANDROID (variant small) ─────────────────
+## Memastikan ukuran teks dan tombol nyaman untuk layar sentuh Android.
+
+style say_dialogue is default:
+    variant "small"
+    size 42
+    color "#E8F5E9"
+    outlines [(2, "#000000", 0, 0)]
+
+style say_thought is say_dialogue:
+    variant "small"
+    size 42
+    color "#B3E5FC"
+    italic True
+
+style say_label is default:
+    variant "small"
+    size 50
+    bold True
+    outlines [(2, "#000000AA", 1, 1)]
+
+style choice_vbox:
+    variant "small"
+    spacing 18
+
+style choice_button:
+    variant "small"
+    background Frame("#0D1B2A", 6, 6)
+    hover_background Frame("#0D3B5E", 6, 6)
+    selected_background Frame("#0D2E4D", 6, 6)
+    padding (30, 18)
+    xminimum 800
+    xalign 0.5
+
+style choice_button_text:
+    variant "small"
+    color "#90CAF9"
+    hover_color "#00E5FF"
+    size 40
+    xalign 0.5
+
+style quick_button:
+    variant "small"
+    background None
+    hover_background None
+    padding (18, 12)
+
+style quick_button_text:
+    variant "small"
+    size 38
+    color "#78909C"
+    hover_color "#00E5FF"
+    outlines []
+
 ## ─── LAYAR SPLASH / TITLE ─────────────────────────────────────
 
 screen splash_tkj():

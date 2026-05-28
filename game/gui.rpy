@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## Inisialisasi
 ################################################################################
 
@@ -431,25 +431,26 @@ init python:
     @gui.variant
     def small():
 
-        ## Font sizes.
-        gui.text_size = 45
-        gui.name_text_size = 54
-        gui.notify_text_size = 38
-        gui.interface_text_size = 45
-        gui.button_text_size = 45
-        gui.label_text_size = 51
+        ## Font sizes — diperbesar agar nyaman dibaca di layar Android
+        gui.text_size = 48
+        gui.name_text_size = 58
+        gui.notify_text_size = 40
+        gui.interface_text_size = 48
+        gui.button_text_size = 48
+        gui.label_text_size = 54
 
-        ## Sesuaikan lokasi kotak teks.
-        gui.textbox_height = 360
+        ## Textbox — diperbesar signifikan agar dialog mudah dibaca
+        gui.textbox_height = 480
         gui.name_xpos = 120
         gui.dialogue_xpos = 135
         gui.dialogue_width = 1650
+        gui.dialogue_ypos = 90
 
         ## Ubah ukuran dan jarak dari berbagai hal.
         gui.slider_size = 54
 
         gui.choice_button_width = 1860
-        gui.choice_button_text_size = 45
+        gui.choice_button_text_size = 48
 
         gui.navigation_spacing = 30
         gui.pref_button_spacing = 15
@@ -457,7 +458,9 @@ init python:
         gui.history_height = 285
         gui.history_text_width = 1035
 
-        gui.quick_button_text_size = 30
+        ## Quick Menu — diperbesar agar mudah ditekan di layar sentuh Android
+        gui.quick_button_text_size = 42
+        gui.quick_button_borders = Borders(60, 21, 60, 10)
 
         ## Tata letak tombol file.
         gui.file_slot_cols = 2
@@ -478,3 +481,4 @@ init python:
 
         gui.nvl_button_width = 1860
         gui.nvl_button_xpos = 30
+

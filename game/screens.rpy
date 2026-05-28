@@ -411,8 +411,7 @@ screen main_menu():
         imagebutton idle "gui/Pengaturan.png" at main_menu_btn_zoom action ShowMenu("preferences") # Menu pengaturan
         imagebutton idle "gui/Kredit.png" at main_menu_btn_zoom action ShowMenu("about") # Menu tentang/kredit
         
-        if renpy.variant("pc"):
-            imagebutton idle "gui/Keluar.png" at main_menu_btn_zoom action Quit(confirm=not main_menu)
+        imagebutton idle "gui/Keluar.png" at main_menu_btn_zoom action Quit(confirm=not main_menu)
 
     ## TEKS COPYRIGHT WATERMARK (POJOK KANAN BAWAH)
     text "Copyright 2026 NetPro All Rights Reserved.":
