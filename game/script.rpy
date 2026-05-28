@@ -946,6 +946,10 @@ label climax_benar:
 
     mc "Berdasarkan data, ini broadcast storm akibat Spanning Tree loop!"
     mc "Kabel baru yang dipasang kemarin sepertinya membuat loop di topologi."
+
+    # Memanggil popup diagram loop switch secara interaktif
+    call screen diagram_broadcast_storm
+
     mc "Solusi: isolasi port yang mencurigakan dulu, aktifkan STP dengan benar!"
 
     sistem "[[ ACTION ]] Identifying loop port on Core Switch..."
@@ -1167,6 +1171,9 @@ label game_over:
     play music "audio/bgm_success.mp3" fadein 1.5
     scene bg luar with fade
     pause 0.5
+
+    # Memanggil popup diagram Quiz Refleksi & Sistem Skor
+    call screen diagram_quiz_skor
 
     narasi ""
     narasi "✦━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━✦"
@@ -1516,6 +1523,10 @@ label ch2_q1_benar:
     sistem "[[ Subnet 3 ]] 192.168.10.128 — 192.168.10.191  → Finance"
 
     mc "Subnet ke-2 dimulai dari .64 karena setiap blok /26 berisi 64 alamat!"
+
+    # Memanggil popup diagram VLAN & Subnetting /26
+    call screen diagram_vlan_subnetting
+
     mentor "Benar sekali! .0-.63 = IT, .64-.127 = Marketing, .128-.191 = Finance."
     mentor "Network address .64, broadcast .127, host valid .65 sampai .126."
     mentor "+20 poin! Sekarang kita bisa mulai konfigurasi VLAN di switch."
@@ -2159,7 +2170,10 @@ label ch3_q2_benar:
     
     mc "Kita atur Network Address Translation (NAT) jenis Overload atau Port Address Translation (PAT) di Router Gateway, Pak!"
     mentor "Pilihan cerdas! NAT merubah IP Address pengirim (Private) menjadi IP Public kantor kita secara dinamis sebelum ke internet."
-    
+
+    # Memanggil popup diagram WAN OSPF + NAT/PAT
+    call screen diagram_wan_ospf_nat
+
     sistem "[[ CONFIG ]] Router(config)# ip nat inside source list 1 interface GigabitEthernet0/1 overload"
     sistem "[[ STATUS ]] Internet Connection Established for 192.168.10.0/24 subnet"
     
@@ -2217,7 +2231,10 @@ label ch3_climax_benar:
     
     mc "Pakai Access Control List (ACL) Extended!"
     mc "Saya block secara spesifik Protocol TCP Port 23 (Telnet) dari 'ANY' (seluruh internet) yang menuju IP server kita, tapi biarkan sisa traffic operasional jalan."
-    
+
+    # Memanggil popup diagram Extended ACL Firewall
+    call screen diagram_extended_acl
+
     sistem "[[ ACTION ]] Router(config)# access-list 101 deny tcp any host 110.12.30.2 eq 23"
     sistem "[[ ACTION ]] Router(config)# access-list 101 permit ip any any"
     sistem "[[ ACTION ]] Router(config-if)# ip access-group 101 in"
@@ -2564,7 +2581,10 @@ label ch4_climax_benar:
     
     mc "Kita intercept requestnya sebelum pergi ke internet dengan *Web Proxy* Server! Seperti tool Squid Proxy di Linux atau Web Proxy di Mikrotik."
     mc "Tinggal pasang rule: drop url `*bioskopgratis*`!"
-    
+
+    # Memanggil popup diagram tiga layanan server (DNS, VoIP, Proxy)
+    call screen diagram_three_servers
+
     sistem "[[ PROXY LOG ]] Setting up ACL dst-domain .bioskopgratis.org... DENY"
     sistem "[[ PROXY LOG ]] Redirecting Traffic ke Transparent Proxy Port 8080."
     sistem "[[ CLIENT VUE ]] ERROR 403: FORBIDDEN BY ADMINISTRATOR"
@@ -2893,7 +2913,10 @@ label ch5_climax_benar:
     
     mc "CABUT DULU KABEL LAN PC-FINANCE-3 SECARA FISIK SEKARANG! Isolasi penyebaran Malware!"
     mc "Selanjutnya saya akan flash Router Utama dengan file 'backup-monthly.rsc' yang sudah rutin saya simpan sejak Chapter 1!"
-    
+
+    # Memanggil popup diagram QOS, VPN & DISASTER RECOVERY
+    call screen diagram_qos_vpn_dr
+
     sistem "[[ ACTION ]] *PLUG OUT* LAN CABLE PORT 6. Ransomware Isolated."
     sistem "[[ ROUTER RECOVERY ]] Importing 'backup-monthly.rsc'..."
     sistem "[[ ROUTER RECOVERY ]] Loading VLAN, Routing, NAT, Firewall Rules... DONE."
@@ -3042,16 +3065,63 @@ label refleksi_quiz_ch5:
     else:
         admin "Kamu memiliki potensi besar, meskipun ada beberapa nilai evaluasi yang rendah."
 
-    mentor "Masa magang [nama_mc] resmi berakhir hari ini. Keterampilan yang kamu tempa mulai dari kabel fisik (Crimping), administrasi Switch (VLAN), pengamanan gerbang (Firewall), perakitan (Server), hingga pelimitasi (QoS) sudah tingkat Profesional!"
+    ## EVALUASI AKHIR & PEMANGGILAN SCREEN KARTU EVALUASI
+    $ final_ending = "bad"
+    if ch5_score >= 70:
+        $ final_ending = "pro"
+    elif ch5_score >= 40:
+        $ final_ending = "mid"
+        
+    call screen diagram_ending_evaluasi(final_ending, ch5_score)
     
-    rafi "Selamat cuy! Jangan lupakan gue kalau lu sukses duluan ya!"
-    
-    admin "Sebagai penghargaan atas upaya luar biasamu..."
-    admin "Maukah kamu menerima posisi Kontrak Junior Network Engineer *Full-Time* di Nusanet Teknologi?"
-    
-    mc "Tentu saja, Bapak! Terima kasih atas ilmunya!"
-    
-    narasi "   「 NetPro: Magang Jaringan — TRUE ENDING COMPLETED!!! 」"
+    if final_ending == "pro":
+        play music "audio/bgm_success.mp3" fadein 2.0
+        scene bg ending_ok with dissolve
+        show admin happy at right, loncat
+        show mentor senyum at left with dissolve
+        show rafi neutral at center with dissolve
+        
+        mentor "Masa magang [nama_mc] resmi berakhir hari ini. Keterampilan yang kamu tunjukkan sangat luar biasa! Skor akhir kamu mencapai [ch5_score] poin!"
+        admin "Kinerja luar biasa di seluruh modul — mulai dari kabel fisik (Crimping), administrasi Switch (VLAN), pengamanan gerbang (Firewall), perakitan (Server), hingga pembatas bandwidth (QoS) sudah di tingkat Profesional!"
+        rafi "Selamat cuy! Gila, lu emang hebat banget. Jangan lupain gue ya kalau udah jadi Network Engineer sukses!"
+        admin "Sebagai penghargaan atas dedikasi dan keahlian kinerjamu..."
+        admin "Maukah kamu menerima posisi Kontrak Junior Network Engineer *Full-Time* di Nusanet Teknologi?"
+        mc "Tentu saja, Bapak! Ini adalah impian saya. Terima kasih banyak atas kepercayaan dan bimbingannya!"
+        mentor "Selamat datang di industri nyata, [nama_mc]. Teruslah belajar dan jangan pernah berhenti berinovasi!"
+        
+        narasi "   「 NetPro: Magang Jaringan — TRUE ENDING COMPLETED!!! 」"
+        
+    elif final_ending == "mid":
+        play music "audio/bgm_ch1.mp3" fadein 2.0
+        scene bg kantor with dissolve
+        show admin serius at right
+        show mentor senyum at left with dissolve
+        show rafi neutral at center with dissolve
+        
+        mentor "Masa magang [nama_mc] 5 bulan resmi berakhir hari ini. Kamu menunjukkan pemahaman dasar yang cukup baik, dengan skor akhir [ch5_score] poin."
+        admin "Kamu memiliki potensi yang kuat. Namun, untuk mempersiapkanmu masuk ke industri nyata, kami ingin kamu lebih tajam dalam konfigurasi routing dinamis Cisco & Mikrotik."
+        admin "Kami memutuskan untuk memberikanmu kesempatan Perpanjangan Magang (3 Bulan) di Program Pengembangan!"
+        rafi "Semangat cuy! Ini kesempatan emas buat makin jago. Kita bakal sering latihan bareng lagi!"
+        mc "Terima kasih banyak, Pak Admin, Pak Hendra! Saya sangat bersyukur atas kesempatan pengembangan ini dan berjanji akan berlatih lebih keras lagi!"
+        mentor "Bagus! Fokus perbaiki kelemahanmu di VLAN routing dan manajemen bandwidth di lab. Kami yakin kamu bisa mencapainya!"
+        
+        narasi "   「 NetPro: Magang Jaringan — DEVELOPMENT ENDING COMPLETED!!! 」"
+        
+    else:
+        play music "audio/bgm_ch1.mp3" fadein 2.0
+        scene bg lab with dissolve
+        show admin serius at right
+        show mentor tegas at left with dissolve
+        show rafi bingung at center with dissolve
+        
+        mentor "Hari ini masa magang resmi berakhir. Skor evaluasi kamu adalah [ch5_score] poin, yang berarti kamu harus belajar lebih giat lagi."
+        admin "Kamu memiliki semangat belajar yang bagus, namun beberapa konsep fundamental jaringan seperti penyusunan kabel crimping T568B dan perhitungan IP subnetting /26 masih perlu pengulangan mendalam."
+        mentor "Jangan berkecil hati, [nama_mc]. Kegagalan hari ini bukanlah akhir, melainkan awal dari keahlian sejati. Kami menyarankanmu untuk mengulang materi dasar dan mencoba lagi kuis evaluasi."
+        rafi "Tetap semangat, bro! Kita semua belajar dari kesalahan. Jangan menyerah, ayo kita pelajari lagi bareng-bareng!"
+        mc "Terima kasih atas bimbingan dan masukannya yang sangat berharga, Pak. Saya tidak akan menyerah, saya akan mempelajari kembali seluruh dasar jaringan dari awal sampai benar-benar paham!"
+        mentor "Itulah sikap seorang teknisi sejati! Teruslah berlatih, pintu sukses selalu terbuka bagi mereka yang gigih!"
+        
+        narasi "   「 NetPro: Magang Jaringan — STUDY AGAIN ENDING COMPLETED!!! 」"
     
     menu:
         "Mainkan Lagi (Dari awal Chapter 1)":
