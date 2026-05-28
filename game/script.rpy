@@ -123,25 +123,28 @@ init python:
 
 ## HUD Score: Menampilkan skor di pojok kanan atas layar secara permanen.
 screen hud_score():
-    frame:
-        xalign 1.0
-        yalign 0.0
-        if renpy.variant("small"):
+    if renpy.variant("small"):
+        frame:
+            xalign 1.0
+            yalign 0.0
             xoffset -20
             yoffset 20
             background Frame("#1A237EBB", 8, 8)
             padding (20, 14)
-        else:
+            vbox:
+                spacing 2
+                text "[[ SKOR ]]" size 22 color "#90CAF9" xalign 1.0
+                text "[score] poin" size 36 color "#E3F2FD" bold True xalign 1.0
+    else:
+        frame:
+            xalign 1.0
+            yalign 0.0
             xoffset -10
             yoffset 10
             background Frame("#1A237E88", 8, 8)
             padding (12, 8)
-        vbox:
-            spacing 2
-            if renpy.variant("small"):
-                text "[[ SKOR ]]" size 22 color "#90CAF9" xalign 1.0
-                text "[score] poin" size 36 color "#E3F2FD" bold True xalign 1.0
-            else:
+            vbox:
+                spacing 2
                 text "[[ SKOR ]]" size 11 color "#90CAF9" xalign 1.0
                 text "[score] poin" size 18 color "#E3F2FD" bold True xalign 1.0
 

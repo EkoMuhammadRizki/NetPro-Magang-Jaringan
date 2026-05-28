@@ -104,9 +104,6 @@ define config.end_game_transition = None
 ## Digunakan ketika memasuki menu utama setelah splashscreen berakhir (menghilangkan kedipan).
 define config.end_splash_transition = dissolve
 
-## Menonaktifkan splash "Made with Ren'Py" bawaan agar user langsung ke intro video.
-define config.default_presplash = False
-
 
 ## Variabel untuk menset transisi yang digunakan ketika mulai game tidak
 ## tersedia. Melainkan, menggunakan pernyataan with setelah menunjukan layar
