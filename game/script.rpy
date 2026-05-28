@@ -126,14 +126,24 @@ screen hud_score():
     frame:
         xalign 1.0
         yalign 0.0
-        xoffset -10
-        yoffset 10
-        background Frame("#1A237E88", 8, 8) # Latar belakang biru tua transparan
-        padding (12, 8)
+        if renpy.variant("small"):
+            xoffset -20
+            yoffset 20
+            background Frame("#1A237EBB", 8, 8)
+            padding (20, 14)
+        else:
+            xoffset -10
+            yoffset 10
+            background Frame("#1A237E88", 8, 8)
+            padding (12, 8)
         vbox:
             spacing 2
-            text "[[ SKOR ]]" size 11 color "#90CAF9" xalign 1.0
-            text "[score] poin" size 18 color "#E3F2FD" bold True xalign 1.0
+            if renpy.variant("small"):
+                text "[[ SKOR ]]" size 22 color "#90CAF9" xalign 1.0
+                text "[score] poin" size 36 color "#E3F2FD" bold True xalign 1.0
+            else:
+                text "[[ SKOR ]]" size 11 color "#90CAF9" xalign 1.0
+                text "[score] poin" size 18 color "#E3F2FD" bold True xalign 1.0
 
 ## Layar konfirmasi pilihan: Digunakan untuk menanyakan konfirmasi (Ya/Tidak) kepada pemain.
 screen konfirmasi(pesan, label_ya, label_tidak):

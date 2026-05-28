@@ -157,6 +157,15 @@ style input:
     size 42
     color "#00E5FF"
 
+## ─── QUICK MENU POSISI ANDROID (variant small) ───────────────
+## Memastikan quick menu menempel di bawah textbox tanpa gap.
+
+style quick_menu:
+    variant "small"
+    xalign 0.5
+    yalign 1.0
+    yoffset -5
+
 ## ─── LAYAR SPLASH / TITLE ─────────────────────────────────────
 
 screen splash_tkj():
