@@ -439,12 +439,11 @@ init python:
         gui.button_text_size = 48
         gui.label_text_size = 54
 
-        ## Textbox — diperbesar signifikan agar dialog mudah dibaca
-        gui.textbox_height = 480
+        ## Textbox — ukuran yang pas untuk Android tanpa menutupi layar
+        gui.textbox_height = 370
         gui.name_xpos = 120
         gui.dialogue_xpos = 135
         gui.dialogue_width = 1650
-        gui.dialogue_ypos = 90
 
         ## Ubah ukuran dan jarak dari berbagai hal.
         gui.slider_size = 54

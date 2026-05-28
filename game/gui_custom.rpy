@@ -144,6 +144,19 @@ style quick_button_text:
     hover_color "#00E5FF"
     outlines []
 
+## ─── INPUT TEXT ANDROID (variant small) ───────────────────────
+## Memastikan teks input (nama, dll) terbaca jelas di Android.
+
+style input_prompt is default:
+    variant "small"
+    size 42
+    color "#E3F2FD"
+
+style input:
+    variant "small"
+    size 42
+    color "#00E5FF"
+
 ## ─── LAYAR SPLASH / TITLE ─────────────────────────────────────
 
 screen splash_tkj():
